@@ -1,0 +1,13 @@
+@import './panels/DevicesPanel';
+.iqs-device-avatar {
+    position: relative;
+}
+
+.iqt-device-bulet {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+}

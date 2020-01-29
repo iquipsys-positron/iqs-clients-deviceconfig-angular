@@ -1,0 +1,27 @@
+<pip-document>
+    <div class="pip-body rp0 layout-column layout-align-center-center flex ">
+        <div class="layout-column layout-align-center-center flex iqs-empty">
+            <div class="pip-empty" ng-if="$ctrl.state == 'empty' && !$ctrl.isPreLoading">
+                <img src="images/empty/empty.svg" class="pip-pic">
+                <div class="pip-text">
+                    {{ ::'GATEWAYS_EMPTY_TITLE' | translate }}
+                </div>
+                <div class="pip-actions  layout-row layout-align-end-center">
+                    <md-button iqs-test-add class="color-accent-bg tm12 flex" aria-label="DOWNLOAD" xxxng-if="$ctrl.accessConfig.addGateway"
+                               ng-click="$ctrl.onAdd()" ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.addGateway">
+
+                        {{ ::'GATEWAYS_EMPTY_ADD_BUTTON' | translate }}
+                    </md-button>
+                </div>
+            </div>
+
+            <div class="pip-empty" ng-if="$ctrl.state == 'progress' || $ctrl.isPreLoading">
+                <img src="images/empty/progress.svg" class="pip-pic">
+                <div class="pip-text">
+                    {{ ::'GATEWAYS_LOADING_TITLE' | translate }}
+                    <md-progress-linear md-mode="indeterminate" class="tm24"></md-progress-linear>
+                </div>
+            </div>
+        </div>
+    </div>
+</pip-document>

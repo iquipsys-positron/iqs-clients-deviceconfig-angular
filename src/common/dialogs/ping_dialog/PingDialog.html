@@ -1,0 +1,43 @@
+<md-dialog class="pip-dialog layout-column bp0 pip-scroll iqs-ping-dialog" md-theme="{{$ctrl.theme}}">
+
+	<div class="pip-header p16 bp8">
+		<div class="w-stretch">
+			<h3 class="m0 w-stretch">{{ ::$ctrl.dialogTitle | translate }}</h3>
+		</div>
+	</div>
+
+	<div class="pip-body p16 bp8 pip-scroll pip-progress-body">
+		<div class="layout-row">
+			<div class="pip-progress-icon color-badge-bg" ng-if="$ctrl.showOkButton && !$ctrl.isPing">
+				<md-icon md-svg-icon="icons:cross"></md-icon>
+			</div>
+			<div class="pip-progress-icon" ng-if="!$ctrl.showOkButton && !$ctrl.isPing">
+				<md-progress-circular ng-show="!$ctrl.showOkButton" class="md-accent" md-diameter="30px"></md-progress-circular>
+			</div>
+			<div class="pip-progress-icon bb-green" ng-if="$ctrl.showOkButton && $ctrl.isPing">
+				<md-icon md-svg-icon="icons:check"></md-icon>
+			</div>
+			<div class="pip-progress-content">
+				<h3 class="pip-title">
+					<span ng-if="!$ctrl.showOkButton">{{ $ctrl.pingString | translate }}</span>
+					<span ng-if="$ctrl.showOkButton && $ctrl.isPing">{{ $ctrl.pingSuccess | translate }}</span>
+					<span ng-if="$ctrl.showOkButton && !$ctrl.isPing">{{ $ctrl.pingFailed | translate }}</span>
+				</h3>
+				<div class="color-error pip-error" ng-if="$ctrl.error">
+					{{ $ctrl.error | translate }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="pip-footer ">
+		<div class="flex"></div>
+		<md-button class="md-accent" ng-show="!$ctrl.showOkButton" ng-click="$ctrl.onAbort()">{{ ::'PING_DIALOG_ABORT' |
+			translate }}</md-button>
+		<md-button class="md-accent" ng-show="$ctrl.showOkButton && $ctrl.isPing" ng-click="$ctrl.onOk()">{{
+			::'PING_DIALOG_OK' | translate }}</md-button>
+		<md-button class="md-accent" ng-show="$ctrl.showOkButton && !$ctrl.isPing" ng-click="$ctrl.onOk()">{{
+			::'PING_DIALOG_CLOSE' | translate }}</md-button>
+	</div>
+</md-dialog>

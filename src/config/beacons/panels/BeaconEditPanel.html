@@ -1,0 +1,264 @@
+<pip-document>
+    <md-progress-linear md-mode="indeterminate" style="position: absolute;" ng-show="$ctrl.ngDisabled() || ($ctrl.transaction && $ctrl.transaction.busy())"></md-progress-linear>
+    <div class="pip-body p24 layout-column bp0">
+        <div class="w-stretch">
+            <div ng-show="$ctrl.error" class="pip-page-errors bm16">
+                <span class="pip-error-text color-error flex"> {{ $ctrl.error | translate }}</span>
+                <md-icon md-svg-icon="icons:warn-circle" class="color-error"></md-icon>
+            </div>
+            <form name="form" novalidate>
+                <div class="">
+                    <md-input-container class="md-block flex tm24 xxxbm0">
+                        <label>{{::'BEACON_NAME' | translate}}</label>
+                        <input iqs-test-name ng-model="$ctrl.beacon.label" iqs-unique-validator iqs-unique-collection="$ctrl.nameCollection"
+                               required name="label">
+
+                        <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.label)" role="alert">
+                            <div ng-message="required">{{ 'BEACON_NAME_REQUIRED_ERROR' | translate }}</div>
+                            <div ng-message="uniqueValidate">{{ 'BEACON_LABEL_UNIQUE_ERROR' | translate }}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <md-input-container class="md-block tm0 bm0">
+                    <label>{{ ::'BEACON_TYPE_LABEL' | translate }}</label>
+                    <md-select iqs-test-select-type class="flex" aria-label="TYPE" ng-model="$ctrl.beacon.type"
+                               ng-required="$ctrl.beacon.type" ng-change="$ctrl.error=null" placeholder="{{ ::'BEACON_TYPE_PLACEHOLDER' | translate }}"
+                               name="beaconType">
+                        <md-option iqs-test-option-signal ng-repeat="t in $ctrl.typeCollection  track by $index"
+                                   ng-value="t.id">
+                            {{ t.title | translate }}
+                        </md-option>
+                    </md-select>
+
+                    <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.beaconType)" role="alert">
+                        <div ng-message="required">{{ 'BEACON_TYPE_REQUIRED_ERROR' | translate }}</div>
+                    </div>
+                </md-input-container>
+
+                <!--  -->
+
+                <div class="layout-row hide-md-errors-spacer" ng-if="$ctrl.beacon.type==$ctrl.typeIBeacon || $ctrl.beacon.type==$ctrl.typeAltBeacon">
+                    <div class="md-block bm0 rm16 flex">
+                        <md-input-container class="md-block flex tm24 xxxbm0">
+                            <label>{{::'BEACON_PROXIMITYUUID' | translate}}</label>
+                            <input ng-model="$ctrl.proximityUUID" ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()"
+                                   required minlength="32" maxlength="32" size="32" ng-pattern="/([0-9a-f]{32})/" name="proximityUUID">
+
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.proximityUUID)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_UDI_PROXIMITYUUID_REQUIRED_ERROR' | translate }}</div>
+                                <!-- <div ng-message="verifyBeaconUdi">{{ 'BEACON_UDI_UNIQUE_ERROR' | translate }}</div> -->
+
+                                <div ng-message="minlength">{{ 'BEACON_PROXIMITYUUID_ERROR_LENGTH' | translate }}</div>
+                                <div ng-message="pattern">{{ 'BEACON_PROXIMITYUUID_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="md-block  bm0 rm16" style="width: 108px;">
+                        <md-input-container class="md-block flex tm24 xxxbm0">
+                            <label>{{::'BEACON_MAJOR' | translate}}</label>
+                            <input ng-model="$ctrl.major" ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()"
+                                   required maxlength="5" size="5" ng-pattern="/([0-9])/" name="major">
+
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.major)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_UDI_MAJOR_REQUIRED_ERROR' | translate }}</div>
+                                <!-- <div ng-message="verifyBeaconUdi">{{ 'BEACON_UDI_UNIQUE_ERROR' | translate }}</div> -->
+
+                                <div ng-message="maxlength">{{ 'BEACON_MAJOR_ERROR_LENGTH' | translate }}</div>
+                                <div ng-message="pattern">{{ 'BEACON_MAJOR_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="md-block bm0" style="width: 108px;">
+                        <md-input-container class="md-block flex tm24 xxxbm0">
+                            <label>{{::'BEACON_MINOR' | translate}}</label>
+                            <input ng-model="$ctrl.minor" ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()"
+                                   required maxlength="5" size="5" ng-pattern="/([0-9])/" name="minor">
+
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.minor)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_UDI_MINOR_REQUIRED_ERROR' | translate }}</div>
+                                <!-- <div ng-message="verifyBeaconUdi">{{ 'BEACON_UDI_UNIQUE_ERROR' | translate }}</div> -->
+                                <div ng-message="maxlength">{{ 'BEACON_MINOR_ERROR_LENGTH' | translate }}</div>
+                                <div ng-message="pattern">{{ 'BEACON_MINOR_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <!--  -->
+
+                <div class="layout-row hide-md-errors-spacer" ng-if="$ctrl.beacon.type==$ctrl.typeEddyStoneUdi">
+                    <div class="md-block  bm0 rm16 flex">
+                        <md-input-container class="md-block flex tm24 xxxbm0">
+                            <label>{{::'BEACON_NAMESPACEID' | translate}}</label>
+                            <input iqs-test-namespaceId ng-model="$ctrl.namespaceId" ng-model-options="{ delay: 500 }"
+                                   ng-change="$ctrl.onChangeUdi()" required minlength="20" maxlength="20" size="20"
+                                   ng-pattern="/([0-9a-f]{20})/" name="namespaceId">
+
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.namespaceId)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_UDI_NAMESPACEID_REQUIRED_ERROR' | translate }}</div>
+                                <!-- <div ng-message="verifyBeaconUdi">{{ 'BEACON_UDI_UNIQUE_ERROR' | translate }}</div> -->
+
+                                <div ng-message="minlength">{{ 'BEACON_NAMESPACEID_ERROR_LENGTH' | translate }}</div>
+                                <div ng-message="pattern">{{ 'BEACON_NAMESPACEID_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="md-block bm0 flex">
+                        <md-input-container class="md-block flex tm24 xxxbm0">
+                            <label>{{::'BEACON_INSTANCEID' | translate}}</label>
+                            <input ng-model="$ctrl.instanceId" ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()"
+                                   required minlength="12" maxlength="12" size="12" ng-pattern="/([0-9a-f]{12})/" name="instanceId">
+
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.instanceId)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_UDI_INSTANCEID_REQUIRED_ERROR' | translate }}</div>
+                                <!-- <div ng-message="verifyBeaconUdi">{{ 'BEACON_UDI_UNIQUE_ERROR' | translate }}</div> -->
+
+                                <div ng-message="minlength">{{ 'BEACON_INSTANCEID_UDI_ERROR_LENGTH' | translate }}</div>
+                                <div ng-message="pattern">{{ 'BEACON_INSTANCEID_UDI_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <!--  -->
+
+                <div class="layout-row hide-md-errors-spacer bm8" ng-if="$ctrl.beacon.type==$ctrl.typeUnknown">
+                    <div class="md-block bm0 flex">
+                        <md-input-container class="md-block flex tm24 xxxbm0">
+                            <label>{{::'BEACON_UNKNOWN_UDI' | translate}}</label>
+                            <input ng-model="$ctrl.unknownUDI" ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()"
+                                   required name="unknownUDI" ng-pattern="/([0-9a-f])/">
+
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.unknownUDI)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_UDI_REQUIRED_ERROR' | translate }}</div>
+                                <!-- <div ng-message="verifyBeaconUdi">{{ 'BEACON_UDI_UNIQUE_ERROR' | translate }}</div> -->
+
+                                <div ng-message="pattern">{{ 'BEACON_UNKNOWN_UDI_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <!--  -->
+
+                <div class="layout-row hide-md-errors-spacer bm8" ng-if="$ctrl.pipMedia('gt-md')">
+                    <div class="md-block  bm0 rm16 flex">
+                        <md-input-container class="md-block  xxxxbm0 rm16 flex">
+                            <label>{{::'BEACON_LABEL_LONGITUDE' | translate}}</label>
+                            <input ng-model="$ctrl.currentBeacon.longitude" type="number" ng-change="$ctrl.onChangeCenter()"
+                                   name="lon" required>
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.lon)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_LONGITUDE_REQUIRED_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <div class="md-block bm0 flex">
+                        <md-input-container class="md-block xxxxbm0 flex">
+                            <label>{{::'BEACON_LABEL_LATTITUDE' | translate}}</label>
+                            <input ng-model="$ctrl.currentBeacon.latitude" type="number" ng-change="$ctrl.onChangeCenter()"
+                                   name="lat" required>
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.lat)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_LATTITUDE_REQUIRED_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <!--  -->
+
+                <div class="layout-column hide-md-errors-spacer bm8" ng-if="!$ctrl.pipMedia('gt-md')">
+                    <div class="md-block bm0 flex">
+                        <md-input-container class="md-block  xxxxbm0 rm16 flex">
+                            <label>{{::'BEACON_LABEL_LONGITUDE' | translate}}</label>
+                            <input ng-model="$ctrl.currentBeacon.longitude" type="number" ng-change="$ctrl.onChangeCenter()"
+                                   name="lon" required>
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.lon)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_LONGITUDE_REQUIRED_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <div class="md-block bm0 flex">
+                        <md-input-container class="md-block xxxxbm0 flex">
+                            <label>{{::'BEACON_LABEL_LATTITUDE' | translate}}</label>
+                            <input ng-model="$ctrl.currentBeacon.latitude" type="number" ng-change="$ctrl.onChangeCenter()"
+                                   name="lat" required>
+                            <div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.lat)" role="alert">
+                                <div ng-message="required">{{ 'BEACON_LATTITUDE_REQUIRED_ERROR' | translate }}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <!-- <div class="pip-ref-item layout-row">
+                    <md-input-container class="md-block rm16 bm8 flex">
+                        <label>{{::'BEACON_LABEL_DISTANSE' | translate}}</label>
+                        <input ng-model="$ctrl.currentBeacon.radius" type="number">
+                    </md-input-container>
+                </div>   -->
+
+            </form>
+        </div>
+
+        <div class="iqs-beacon-container layout-column flex" style="position: relative; min-height: 300px;">
+            <pip-map-edit ng-if="$ctrl.mapOptions && !$ctrl.startPause" pip-show-action-panel="false" pip-overlay="$ctrl.currentBeacon"
+                          pip-on-edit="$ctrl.onEdit(overlay, type, path, center, radius)" pip-map-options="$ctrl.mapOptions"
+                          pip-disabled="false" pip-control="$ctrl.setControl(control)">
+            </pip-map-edit>
+            <div class="iqs-map-edit-zoom-buttons" ng-if="$ctrl.mapOptions">
+                <iqs-zoom-buttons-panel iqs-zoom-in="$ctrl.onZoomIn()" iqs-zoom-out="$ctrl.onZoomOut()"></iqs-zoom-buttons-panel>
+            </div>
+
+            <div class="iqs-map-edit-overlay-buttons layout-column">
+                <md-button iqs-test-tool-pan aria-label="DrawCircle" ng-click="$ctrl.selectSection(0)" ng-class="{'md-accent': $ctrl.section === 0 }"
+                           class="md-fab md-raised md-mini">
+                    <md-tooltip md-visible="showTooltip" md-direction="right">
+                        {{ 'ZONE_PAN' | translate }}
+                    </md-tooltip>
+                    <md-icon md-svg-icon="iqs:draw-pan" aria-label="DrawCircle"></md-icon>
+                </md-button>
+                <md-button iqs-test-tool-add aria-label="DrawCircle" ng-click="$ctrl.selectSection(1)" ng-class="{'md-accent': $ctrl.section === 1 }"
+                           class="md-fab md-raised md-mini">
+                    <md-tooltip md-visible="showTooltip" md-direction="right">
+                        {{ 'BEACON_EMPTY_ADD_BUTTON' | translate }}
+                    </md-tooltip>
+                    <md-icon md-svg-icon="icons:pen" aria-label="DrawCircle"></md-icon>
+                </md-button>
+            </div>
+
+            <div class="iqs-map-edit-clear-buttons layout-column">
+                <md-button iqs-test-tool-clear aria-label="ClearMap" ng-click="$ctrl.clearMap()" class="md-fab md-raised md-mini">
+                    <md-tooltip md-visible="showTooltip" md-direction="right">
+                        {{ 'ZONE_CLEAR_MAP' | translate }}
+                    </md-tooltip>
+                    <md-icon md-svg-icon="iqs:draw-clear" aria-label="ClearMap"></md-icon>
+                </md-button>
+            </div>
+
+            <div class="iqs-map-edit-center-buttons layout-column" ng-if="$ctrl.mapOptions">
+                <md-button iqs-test-tool-center aria-label="ClearMap" ng-click="$ctrl.toCenter()" class="md-fab md-raised md-mini">
+                    <md-tooltip md-visible="showTooltip" md-direction="left">
+                        {{ 'TO_CENTER' | translate }}
+                    </md-tooltip>
+                    <md-icon md-svg-icon="icons:target" aria-label="ClearMap"></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pip-footer " style="height: 86px">
+        <div class="pip-action-list w-stretch">
+            <md-button iqs-test-save class="pip-action-list-item" ng-click="$ctrl.onSaveClick()" ng-disabled="$ctrl.ngDisabled() || $ctrl.error">
+                <md-icon class="pip-pic" md-svg-icon="icons:check"></md-icon>
+                <div class="pip-title">{{::'BEACON_SAVE' | translate }}</div>
+            </md-button>
+            <md-button iqs-test-cancel class="pip-action-list-item" ng-click="$ctrl.onCancelClick()" ng-disabled="$ctrl.ngDisabled()">
+                <md-icon class="pip-pic" md-svg-icon="icons:cross"></md-icon>
+                <div class="pip-title">{{::'BEACON_CANCEL' | translate}}</div>
+            </md-button>
+        </div>
+    </div>
+</pip-document>

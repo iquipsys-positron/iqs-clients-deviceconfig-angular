@@ -1,0 +1,53 @@
+@import './panels/BeaconEditPanel';
+@import './panels/BeaconEmptyPanel';
+@import './panels/BeaconPanel';
+.iqs-beacon {
+    .pip-ref-list.iqs-beacon-list {
+        .pip-ref-list-item,
+        .pip-ref-item {
+            .pip-content {
+                max-width: calc(100% - 76px);
+                width: calc(100% - 76px);
+                padding-bottom: 16px;
+                padding-top: 15px;
+                .text-caption {
+                    color: rgba(0, 0, 0, 0.54);
+                }
+            }
+        }
+        .new-ref-list-item {
+            .pip-content {
+                max-width: calc(100% - 76px);
+                padding-bottom: 24px;
+                padding-top: 24px;
+            }
+        }
+    }
+    .pip-ref-list.iqs-beacon-list {
+        .pip-ref-list-item {
+            .iqs-list-content {
+                width: calc(100% - 32px);
+                max-width: calc(100% - 32px);
+                .pip-content {
+                    max-width: calc(100% - 56px);
+                    padding-bottom: 16px;
+                    padding-top: 15px;
+                    .text-caption {
+                        color: rgba(0, 0, 0, 0.54);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.pip-xs,
+.pip-sm {
+    .iqs-beacon-list {
+        md-list-item.pip-selectable.pip-ref-list-item.selected {
+            padding-left: 16px !important;
+            background-color: rgb(236, 236, 236);
+            border-left: 5px solid rgb(236, 236, 236) !important;
+        }
+    }
+}

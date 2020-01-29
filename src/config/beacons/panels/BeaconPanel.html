@@ -1,0 +1,74 @@
+<pip-document>
+	<div class="pip-header bp0 rp24 lp24 tp24">
+		<div class="w-stretch">
+			<div class="pip-ref-list">
+				<div class="pip-ref-list-item layout-row layout-align-start-center">
+					<div class="pip-face-md iqs-device-avatar rm16 layout-row layout-align-center-center color-primary-bg p8">
+						<md-icon class="" md-svg-icon="iqs:beacon"></md-icon>
+					</div>
+					<div class="pip-content">
+						<p class="text-title">{{ $ctrl.item.label }}</p>
+						<p class="pip-subtitle">
+							{{ $ctrl.getTypeTitle($ctrl.item.type) | translate }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pip-body p0 layout-column flex">
+
+		<div class="pip-ref-list lp16 rp16">
+			<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item tm8">
+				<md-icon md-svg-icon="iqs:tracker" class="iqs-icon lm0 rm16"></md-icon>
+				<div class="pip-content tp8 bp8">
+					<div class="text-subhead1">
+						{{ $ctrl.item.udi }}
+					</div>
+					<div class="pip-subtitle color-secondary-text">
+						{{::'BEACON_UDI' | translate}}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="pip-ref-list lp16 rp16">
+			<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item tm8">
+				<md-icon md-svg-icon="icons:key" class="iqs-icon lm0 rm16"></md-icon>
+				<div class="pip-content tp8 bp8">
+					<div class="text-subhead1">
+						{{ $ctrl.item.id }}
+					</div>
+					<div class="pip-subtitle color-secondary-text">
+						{{::'BEACON_ID' | translate}}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="iqs-beacon-container layout-column flex" style="min-height: 300px;">
+			<iqs-incidents-map-panel iqs-object="$ctrl.currBeacon" ng-if="$ctrl.currBeacon && $ctrl.currBeacon.latitude && $ctrl.currBeacon.longitude">
+			</iqs-incidents-map-panel>
+		</div>
+	</div>
+	<div class="pip-footer " style="height: 86px">
+		<div class="pip-action-list w-stretch">
+			<md-button iqs-test-edit class="pip-action-list-item" xxng-if="$ctrl.accessConfig.editBeacon" ng-click="$ctrl.onEdit()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.editBeacon">
+
+				<md-icon class="pip-pic" md-svg-icon="icons:pen"></md-icon>
+				<div class="pip-title">
+					{{ ::'BEACON_EDIT' | translate }}
+				</div>
+			</md-button>
+			<md-button iqs-test-delete class="pip-action-list-item" xxxng-if="$ctrl.accessConfig.addBeacon" ng-click="$ctrl.onDelete()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.addBeacon">
+
+				<md-icon class="pip-pic" md-svg-icon="icons:trash"></md-icon>
+				<div class="pip-title">
+					{{ ::'BEACON_DELETE' | translate}}
+				</div>
+			</md-button>
+		</div>
+	</div>
+</pip-document>

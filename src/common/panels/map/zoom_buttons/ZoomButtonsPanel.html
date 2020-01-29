@@ -1,0 +1,14 @@
+<div class="layout-column">
+    <md-button aria-label="ZoomIn" ng-click="$ctrl.onZoomIn()" class="md-fab md-raised md-mini">
+        <md-tooltip md-visible="showTooltip" md-direction="left">
+            {{ ::'ZOOM_IN' | translate }}
+        </md-tooltip>
+        <md-icon md-svg-icon="icons:plus" aria-label="ZoomIn"></md-icon>
+    </md-button>
+    <md-button aria-label="ZoomOut" ng-click="$ctrl.onZoomOut()" class="md-fab md-raised md-mini">
+        <md-tooltip md-visible="showTooltip" md-direction="left">
+            {{ ::'ZOOM_OUT' | translate }}
+        </md-tooltip>
+        <md-icon md-svg-icon="icons:minus" aria-label="ZoomOut"></md-icon>
+    </md-button>
+</div>

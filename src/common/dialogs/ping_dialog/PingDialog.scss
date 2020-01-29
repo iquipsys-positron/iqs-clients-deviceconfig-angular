@@ -1,0 +1,32 @@
+.iqs-ping-dialog {
+    .pip-footer {
+        border-top: none;
+    }
+    .bb-green {
+        background-color: #7f945c;
+    }
+    .bb-orange {
+        background-color: #ff9800;
+    }
+    .pip-progress-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 16px;
+        md-icon {
+            color: #fff !important;
+            margin: 3px;
+        }
+    }
+    .pip-progress-content {
+        width: 100%;
+        .pip-title {
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+        .pip-error {
+            word-break: break-word;
+            margin-top: 5px;
+        }
+    }
+}

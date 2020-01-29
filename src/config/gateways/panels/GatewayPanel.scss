@@ -1,0 +1,24 @@
+.iqs-gateways-panel {
+    .pip-ref-title {
+        height: 48px;
+        min-height: 48px;
+    }
+    .pip-ref-title {
+        md-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 16px;
+        }
+    }
+    .pip-pic.iqs-gateway-avatar {
+        border-radius: 32px;
+        height: 64px;
+        width: 64px;
+        md-icon {
+            height: 40px;
+            width: 40px;
+            min-height: 40px;
+            min-width: 40px;
+        }
+    }
+}

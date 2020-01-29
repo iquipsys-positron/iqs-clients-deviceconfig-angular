@@ -1,0 +1,56 @@
+<pip-document>
+	<md-progress-linear md-mode="indeterminate" style="position: absolute;" ng-show="$ctrl.ngDisabled() || ($ctrl.transaction && $ctrl.transaction.busy())"></md-progress-linear>
+	<div class="pip-body p24 flex">
+
+		<form name="form" novalidate>
+
+			<div class="layout-row layout-align-center-center">
+				<div class="pip-pic iqs-gateway-avatar layout-row layout-align-center-center color-primary-bg">
+					<md-icon class="" md-svg-icon="icons:connections"></md-icon>
+				</div>
+			</div>
+
+			<md-input-container class="md-block flex bm24">
+				<label>{{ ::'GATEWAYS_MODEL_LABEL'| translate }}</label>
+				<md-select iqs-test-type ng-model="$ctrl.gateway.model">
+					<md-option ng-repeat="model in $ctrl.gatewayModelCollection track by $index" ng-value="model.id">
+						{{ ::model.title | translate }}
+					</md-option>
+				</md-select>
+			</md-input-container>
+
+			<md-input-container class="md-block flex bm0">
+				<label>{{::'GATEWAY_MAC_LABEL' | translate}}</label>
+				<input iqs-test-udi ng-model="$ctrl.gateway.udi" ng-required="$ctrl.gateway.udi" name="udi" ng-change="$ctrl.onChangeUdi()"
+				       ng-model-options="{ delay: 500 }" ng-pattern="/([0-9a-fA-F]{2}){6}$|([0-9a-fA-F]{4}([.]|$)){3}/">
+
+				<div class="hint" ng-if="!$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.udi)">
+					{{::'GATEWAY_MAC_HINT' | translate}}
+				</div>
+
+				<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.udi)" role="alert" multiple>
+					<div ng-message="required">{{ 'GATEWAY_MAC_REQUIRED_ERROR' | translate }}</div>
+					<div ng-message="pattern">{{ 'GATEWAY_MAC_NOTVALID_ERROR' | translate }}</div>
+					<div ng-message="verifyGatewayUdi">{{ 'GATEWAY_MAC_NOT_UNIQUE' | translate }}</div>
+				</div>
+			</md-input-container>
+
+			<md-input-container class="md-block flex bm0">
+				<label>{{ ::'GATEWAYS_LABEL' | translate }}</label>
+				<input iqs-test-label ng-model="$ctrl.gateway.label">
+			</md-input-container>
+		</form>
+	</div>
+	<div class="pip-footer " style="height: 86px">
+		<div class="pip-action-list w-stretch">
+			<md-button iqs-test-save class="pip-action-list-item" ng-click="$ctrl.onSaveClick()" ng-disabled="$ctrl.ngDisabled() || $ctrl.isQuery">
+				<md-icon class="pip-pic" md-svg-icon="icons:check"></md-icon>
+				<div class="pip-title">{{::'GATEWAYS_SAVE' | translate }}</div>
+			</md-button>
+			<md-button iqs-test-cancel class="pip-action-list-item" ng-click="$ctrl.onCancelClick()" ng-disabled="$ctrl.ngDisabled()">
+				<md-icon class="pip-pic" md-svg-icon="icons:cross"></md-icon>
+				<div class="pip-title">{{::'GATEWAYS_CANCEL' | translate}}</div>
+			</md-button>
+		</div>
+	</div>
+</pip-document>

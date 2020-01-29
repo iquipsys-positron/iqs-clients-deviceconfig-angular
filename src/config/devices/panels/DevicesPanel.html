@@ -1,0 +1,239 @@
+<div class="pip-main-menu" ng-class="{'pip-single-content': $ctrl.details || (($ctrl.edit == 'add' || $ctrl.edit == 'edit')  && !$ctrl.pipMedia('gt-sm'))}">
+	<div class="pip-menu layout-column iqs-menu ">
+		<div class="m16">
+			<iqs-global-search-panel ng-disabled="$ctrl.edit == 'edit' || $ctrl.edit == 'add' || $ctrl.transaction.busy()"
+			                         iqs-search-query="$ctrl.status" iqs-search-callback="$ctrl.onSearchResult(query)"
+			                         iqs-cancel-callback="$ctrl.onCanselSearch()" iqs-default-values="$ctrl.defaultCollection"
+			                         iqs-search-collection="$ctrl.searchedCollection">
+			</iqs-global-search-panel>
+		</div>
+
+		<div ng-show="$ctrl.error" class="pip-page-errors">
+			<span class="pip-error-text color-error flex"> {{$ctrl.error}}</span>
+			<md-icon md-svg-icon="icons:warn-circle" class="color-error"></md-icon>
+		</div>
+		<div class="flex" style="position: relative" ng-if="$ctrl.state() == 'data' || $ctrl.edit == 'add'">
+			<md-list class="pip-ref-list tp0 iqs-device-list pip-scroll w-stretch h-stretch iqs-abs-list" pip-selected="$ctrl.selectedIndex()"
+			         pip-select="$ctrl.selectItem($event.index)" pip-selected-watch="$ctrl.selectedIndex()">
+
+				<md-list-item class="pip-ref-list-item pointer new-ref-list-item pip-selectable divider-bottom selected" ng-if="$ctrl.edit == 'add'"
+				              id="new-item" md-ink-ripple>
+					<div ng-click="" class="layout-row w-stretch">
+						<div class="pip-face pip-pic iqs-device-avatar color-disabled-bg tm16 p8 layout-row layout-align-start-center">
+							<md-icon class="" md-svg-icon="iqs:tracker"></md-icon>
+						</div>
+						<div class="pip-content">
+							<p class="text-body2 text-overflow flex">
+								{{:: "NEW_DEVICE" | translate}}
+							</p>
+						</div>
+					</div>
+				</md-list-item>
+
+				<md-list-item class="pip-ref-list-item {{ $ctrl.edit != 'add' && $ctrl.edit != 'edit' ? 'pip-selectable pointer' : $ctrl.edit !='add' && $ctrl.selectedIndex() == $index ? 'iqs-selected' : 'iqs-not-selectable'}}"
+				              ng-class="{'selected': $ctrl.selectedIndex() == $index && $ctrl.edit !='add' && $ctrl.pipMedia('gt-sm') }"
+				              md-ink-ripple ng-repeat="section in $ctrl.collection  track by $index">
+
+					<div ng-click="$ctrl.selectItem($index)" class="layout-row layout-align-start-center iqs-list-content">
+						<div class="pip-face pip-pic tm0 iqs-device-avatar p8 layout-row layout-align-center-center color-primary-bg">
+							<md-icon class="" md-svg-icon="iqs:tracker-1"></md-icon>
+							<div class="iqt-device-bulet iqt-device-bulet-{{section.status}}"></div>
+						</div>
+						<div class="pip-content">
+							<p class="pip-title text-overflow flex">
+								{{ section.label || section.udi }}
+							</p>
+							<p class="pip-subtitle text-overflow flex">
+								{{ $ctrl.getObjectName(section.object_id) || section.object_id || 'free' | translate}}
+							</p>
+						</div>
+					</div>
+				</md-list-item>
+			</md-list>
+
+		</div>
+		<div class="pip-list-container iqs-menu-empty" ng-if="($ctrl.state() == 'empty' || $ctrl.state() == 'progress' || $ctrl.isPreLoading) && $ctrl.pipMedia('gt-sm')">
+		</div>
+
+		<div class="pip-list-container layout-column layout-align-center-center flex pip-body p24" style="height: calc(100% - 80px);"
+		     ng-if="($ctrl.state() == 'empty' || $ctrl.state() == 'progress' || $ctrl.isPreLoading) && !$ctrl.pipMedia('gt-sm')" ng-include="'config/devices/panels/DevicesEmpty.html'">
+		</div>
+
+		<md-button iqs-test-add class="md-fab md-accent md-fab-bottom-right" ng-if="$ctrl.state() == 'data'" ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.addDevice"
+		           xxxng-if="$ctrl.accessConfig.addDevice" aria-label="add" ng-click="$ctrl.addClick()">
+			<md-icon md-svg-icon="icons:plus"></md-icon>
+		</md-button>
+	</div>
+	<div class="pip-content-container">
+		<pip-document class="pip-scroll " ng-if="$ctrl.edit =='data'">
+			<md-progress-linear md-mode="indeterminate" style="position: absolute;" ng-show="$ctrl.transaction.busy()"></md-progress-linear>
+			<div class="pip-header p16 bp0" ng-if="$ctrl.state() == 'data' && $ctrl.edit== 'data' && !$ctrl.isPreLoading">
+				<div class="flex w-stretch">
+					<div class="pip-ref-list">
+						<div class="pip-ref-list-item layout-row layout-align-start-center">
+							<div class="pip-face-md iqs-device-avatar rm16 layout-row layout-align-center-center color-primary-bg p8">
+								<md-icon class="" md-svg-icon="iqs:tracker-1"></md-icon>
+							</div>
+							<div class="pip-content">
+								<p class="text-title">{{ $ctrl.collection[$ctrl.selectedIndex()].label ||
+									$ctrl.collection[$ctrl.selectedIndex()].udi }}</p>
+								<p class="pip-subtitle">
+									<span>{{::'ADMIN_REGISTRATE' | translate}} </span>
+									{{$ctrl.collection[$ctrl.selectedIndex()].create_time | formatLongDate}}
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<md-tabs md-autoselect md-swipe-content md-dynamic-height md-selected="$ctrl.tabIndex">
+						<md-tab label="{{tab.title | translate}}" id="{{tab.id}}" ng-repeat="tab in $ctrl.tabs track by $index" ng-click="$ctrl.selectSection(tab.id)"
+						        xxxng-disabled="$ctrl.transaction.busy()"></md-tab>
+					</md-tabs>
+				</div>
+
+			</div>
+			<div class="pip-body p0 tp0  layout-column flex" ng-if="$ctrl.state() == 'data' && $ctrl.edit== 'data' && $ctrl.tabIndex == 0 && !$ctrl.isPreLoading">
+				<div class="pip-ref-list lp16 rp16">
+					<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item tm8">
+						<md-icon md-svg-icon="iqs:category" class="iqs-icon lm0 rm16"></md-icon>
+						<div class="pip-content tp8 bp8">
+							<div class="text-subhead1">
+								{{$ctrl.typeCollection[$ctrl.collection[$ctrl.selectedIndex()].type].title | translate}}
+							</div>
+							<div class="pip-subtitle color-secondary-text">
+								{{::'ADMIN_MODEL' | translate}}
+							</div>
+						</div>
+					</div>
+
+					<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item">
+						<md-icon md-svg-icon="iqs:tracker" class="iqs-icon lm0 rm16"></md-icon>
+						<div class="pip-content tp8 bp8">
+							<div class="text-subhead1">
+								{{$ctrl.collection[$ctrl.selectedIndex()].udi}}
+							</div>
+							<div class="pip-subtitle color-secondary-text">
+								<span ng-if="$ctrl.collection[$ctrl.selectedIndex()].type == 'iot device'">
+									{{ ::'DEVICE_UDI' | translate }}
+								</span>
+								<span ng-if="$ctrl.collection[$ctrl.selectedIndex()].type == 'smartphone' || $ctrl.collection[$ctrl.selectedIndex()].type == 'phone with bridge'">
+									{{ ::'DEVICE_UDI_PHONE' | translate }}
+								</span>
+								<span ng-if="$ctrl.collection[$ctrl.selectedIndex()].type != 'iot device' && $ctrl.collection[$ctrl.selectedIndex()].type != 'smartphone' && $ctrl.collection[$ctrl.selectedIndex()].type != 'phone with bridge'">
+									{{ ::'DEVICE_UDI_UNKNOWN' | translate }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item" ng-if="$ctrl.collection[$ctrl.selectedIndex()].label">
+						<md-icon md-svg-icon="icons:tag" class="iqs-icon lm0 rm16"></md-icon>
+						<div class="pip-content tp8 bp8">
+							<div class="text-subhead1">
+								{{$ctrl.collection[$ctrl.selectedIndex()].label}}
+							</div>
+							<div class="pip-subtitle color-secondary-text">
+								{{::'ADMIN_LABEL' | translate}}
+							</div>
+						</div>
+					</div>
+
+
+					<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item ">
+						<md-icon md-svg-icon="icons:unlock" class="iqs-icon lm0 rm16"></md-icon>
+						<div class="pip-content tp8 bp8">
+							<div class="text-subhead1" ng-if="$ctrl.deviceStatusActive($ctrl.collection[$ctrl.selectedIndex()])">
+								{{::'ADMIN_ACTIVE' | translate }}
+							</div>
+							<div class="text-subhead1" ng-if="!$ctrl.deviceStatusActive($ctrl.collection[$ctrl.selectedIndex()])">
+								{{::'ADMIN_MISS' | translate }}
+							</div>
+							<div class="pip-subtitle color-secondary-text">
+								{{::'ADMIN_ACTIVE_LABEL' | translate}}
+							</div>
+						</div>
+					</div>
+
+
+					<div class="layout-row layout-align-start-center iqs-inform-panel pip-ref-list-item tm8">
+						<md-icon md-svg-icon="icons:key" class="iqs-icon lm0 rm16"></md-icon>
+						<div class="pip-content tp8 bp8">
+							<div class="text-subhead1">
+								{{ $ctrl.collection[$ctrl.selectedIndex()].id }}
+							</div>
+							<div class="pip-subtitle color-secondary-text">
+								{{::'DEVICE_ID' | translate}}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<iqs-device-object-panel pip-device="$ctrl.collection[$ctrl.selectedIndex()]">
+				</iqs-device-object-panel>
+			</div>
+
+			<div class="pip-body p16 tp0  layout-column flex" ng-if="$ctrl.state() == 'data' && $ctrl.edit== 'data' && $ctrl.tabIndex == 1 && $ctrl.deviceState && !$ctrl.isPreLoading">
+				<!-- <iqs-monitoring-objects-map-panel iqs-object="$ctrl.object" ng-if="$ctrl.object && $ctrl.showMap"></iqs-monitoring-objects-map-panel> -->
+				<iqs-incidents-map-panel iqs-object="$ctrl.deviceState" ng-if="$ctrl.deviceState && $ctrl.deviceState.latitude && $ctrl.deviceState.longitude">
+				</iqs-incidents-map-panel>
+			</div>
+			<div class="pip-body p16 tp0  layout-column layout-align-center-center flex" ng-if="$ctrl.state() == 'data' && $ctrl.edit== 'data' && $ctrl.tabIndex == 1 && !$ctrl.deviceState && !$ctrl.isPreLoading">
+				<div class="layout-column layout-align-center-center flex bb-empty">
+					<div class="pip-empty">
+						<img src="images/empty/empty.svg" class="pip-pic">
+						<div class="pip-text">
+							{{:: 'ADD_DEVICE_EMPTY_LOCATION' | translate}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="pip-footer " style="height: 86px" ng-if="$ctrl.state() == 'data' && $ctrl.edit =='data' && $ctrl.tabIndex == 0 && !$ctrl.isPreLoading">
+				<div class="pip-action-list w-stretch">
+
+					<md-button class="pip-action-list-item" ng-click="$ctrl.activeClick($ctrl.collection[$ctrl.selectedIndex()])"
+					           xxxng-if="$ctrl.accessConfig.editDevice" ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.editDevice">
+
+						<md-icon class="pip-pic" md-svg-icon="icons:lock"></md-icon>
+						<div class="pip-title" ng-if="!$ctrl.deviceStatusActive($ctrl.collection[$ctrl.selectedIndex()])">
+							{{::'ACTIVE' | translate }}
+						</div>
+						<div class="pip-title" ng-if="$ctrl.deviceStatusActive($ctrl.collection[$ctrl.selectedIndex()])">
+							{{::'INACTIVE' | translate }}
+						</div>
+					</md-button>
+					<md-button iqs-test-edit class="pip-action-list-item" ng-click="$ctrl.changeEdit()" xxxng-if="$ctrl.accessConfig.editDevice"
+					           ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.editDevice">
+
+						<md-icon class="pip-pic" md-svg-icon="icons:pen"></md-icon>
+						<div class="pip-title">{{::'EDIT' | translate }}</div>
+					</md-button>
+					<md-button iqs-test-delete class="pip-action-list-item" xxxng-if="$ctrl.accessConfig.deleteDevice" ng-click="$ctrl.deleteClick($ctrl.collection[$ctrl.selectedIndex()].id)"
+					           ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.deleteDevice">
+
+						<md-icon class="pip-pic" md-svg-icon="icons:trash"></md-icon>
+						<div class="pip-title">{{::'DELETE' | translate}}</div>
+					</md-button>
+					<md-button class="pip-action-list-item" ng-click="$ctrl.onPing()" ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.pingDevice"
+					           ng-if="$ctrl.collection[$ctrl.selectedIndex()].type != 'teltonika fmb'">
+
+						<md-icon class="pip-pic" md-svg-icon="iqs:ping"></md-icon>
+						<div class="pip-title">{{ ::'DEVICE_PING' | translate }}</div>
+					</md-button>
+				</div>
+			</div>
+			<div class="pip-body rp0 layout-column layout-align-center-center flex" ng-if="$ctrl.state() == 'empty' || $ctrl.state() == 'progress' || $ctrl.isPreLoading"
+			     ng-include="'config/devices/panels/DevicesEmpty.html'">
+
+			</div>
+
+		</pip-document>
+
+		<iqs-device-edit-panel ng-if="$ctrl.edit == 'edit' && $ctrl.accessConfig.editDevice && !$ctrl.isPreLoading" iqs-edit="$ctrl.edit"
+		                                       iqs-details="$ctrl.details" iqs-device="$ctrl.collection[$ctrl.selectedIndex()]">
+		</iqs-device-edit-panel>
+		<iqs-device-edit-panel ng-if="$ctrl.edit == 'add' && $ctrl.accessConfig.addDevice && !$ctrl.isPreLoading" iqs-edit="$ctrl.edit"
+		                                       iqs-details="$ctrl.details" iqs-device="$ctrl.device">
+		</iqs-device-edit-panel>
+	</div>
+</div>

@@ -1,0 +1,304 @@
+<pip-document>
+	<md-progress-linear md-mode="indeterminate" style="position: absolute;" ng-show="$ctrl.ngDisabled() || ($ctrl.transaction && $ctrl.transaction.busy())"></md-progress-linear>
+	<div class="pip-body p24  layout-column flex">
+		<div class="flex w-stretch layout-column flex">
+			<div class="pip-ref-list">
+				<div class="pip-ref-list-item layout-row layout-align-start-center">
+					<div class="pip-pic iqs-gateway-avatar rm16 layout-row layout-align-center-center color-primary-bg m0">
+						<md-icon class="" md-svg-icon="icons:connections"></md-icon>
+					</div>
+					<div class="pip-content">
+						<p class="text-title">
+							{{ $ctrl.item.label || $ctrl.item.udi }}
+						</p>
+						<p class="pip-subtitle">
+							{{::'GATEWAY_REGISTER_TIME_HINT' | translate }} {{ $ctrl.item.create_time | formatLongDate }}
+						</p>
+					</div>
+				</div>
+
+				<md-tabs md-dynamic-height md-selected="$ctrl.section" ng-if="($ctrl.pipMedia('gt-sm') || !$ctrl.pipMedia('gt-sm') && $ctrl.details) && $ctrl.accessConfig.statGateway">
+					<md-tab label="{{ section.title | translate }}" id="{{ section }}" ng-repeat="section in $ctrl.sections track by $index"
+					        ng-click="$ctrl.selectSection(section)">
+					</md-tab>
+				</md-tabs>
+			</div>
+
+			<div ng-if="$ctrl.section == 0">
+				<div class="layout-row layout-align-start-center pip-ref-list-item tm8">
+					<md-icon md-svg-icon="iqs:category" class="iqs-icon lm0 rm16"></md-icon>
+					<div class="pip-content tp8 bp8">
+						<div class="text-subhead1" ng-if="$ctrl.gatewayModelCollection[$ctrl.item.model].title">
+							{{ $ctrl.gatewayModelCollection[$ctrl.item.model].title | translate }}
+						</div>
+						<div class="text-subhead1" ng-if="!$ctrl.gatewayModelCollection[$ctrl.item.model].title">
+							{{ 'GATEWAY_MODEL_UNKNOWN' | translate }}
+						</div>
+						<div class="pip-subtitle color-secondary-text">
+							{{::'GATEWAYS_MODEL_LABEL' | translate }}
+						</div>
+					</div>
+				</div>
+
+				<div class="layout-row layout-align-start-center pip-ref-list-item">
+					<md-icon md-svg-icon="iqs:tracker" class="iqs-icon lm0 rm16"></md-icon>
+					<div class="pip-content tp8 bp8">
+						<div class="text-subhead1">
+							{{ $ctrl.item.udi }}
+						</div>
+						<div class="pip-subtitle color-secondary-text">
+							{{::'GATEWAYS_IDENTIFICATOR_LABEL' | translate }}
+						</div>
+					</div>
+				</div>
+
+				<div class="layout-row layout-align-start-center pip-ref-list-item" ng-if="$ctrl.item.label">
+					<md-icon md-svg-icon="icons:tag" class="iqs-icon lm0 rm16"></md-icon>
+					<div class="pip-content tp8 bp8">
+						<div class="text-subhead1">
+							{{ $ctrl.item.label }}
+						</div>
+						<div class="pip-subtitle color-secondary-text">
+							{{::'GATEWAYS_LABEL' | translate }}
+						</div>
+					</div>
+				</div>
+
+				<div class="layout-row layout-align-start-center pip-ref-list-item" ng-if="$ctrl.item.receive_time">
+					<md-icon md-svg-icon="icons:time" class="iqs-icon lm0 rm16"></md-icon>
+					<div class="pip-content tp8 bp8">
+						<div class="text-subhead1">
+							{{ $ctrl.item.receive_time }}
+						</div>
+						<div class="pip-subtitle color-secondary-text">
+							{{::'GATEWAYS_INIT_TIME' | translate }}
+						</div>
+					</div>
+				</div>
+
+				<div class="layout-row layout-align-start-center pip-ref-list-item">
+					<md-icon md-svg-icon="icons:unlock" class="iqs-icon lm0 rm16"></md-icon>
+					<div class="pip-content tp8 bp8">
+						<div class="text-subhead1" ng-if="$ctrl.item.active">
+							{{ 'GATEWAYS_ACTIVE' | translate }}
+						</div>
+						<div class="text-subhead1" ng-if="!$ctrl.item.active">
+							{{ 'GATEWAYS_INACTIVE' | translate }}
+						</div>
+						<div class="pip-subtitle color-secondary-text">
+							{{::'GATEWAYS_ACTIVE_LABEL' | translate }}
+						</div>
+					</div>
+				</div>
+
+				<div class="layout-row layout-align-start-center pip-ref-list-item tm8">
+					<md-icon md-svg-icon="icons:key" class="iqs-icon lm0 rm16"></md-icon>
+					<div class="pip-content tp8 bp8">
+						<div class="text-subhead1">
+							{{ $ctrl.item.id }}
+						</div>
+						<div class="pip-subtitle color-secondary-text">
+							{{::'GATEWAYS_ID' | translate}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bm16 layout-column flex" ng-if="$ctrl.section == 1">
+				<div class="layout-column flex">
+					<div class="bm16" ng-if="$ctrl.item.stats && $ctrl.item.stats.length > 0">
+						<div class="text-title bp8 tp8 bm8 tm8">
+							{{ 'GATEWAY_STATISTICS_TIME_LABEL' | translate }}
+							<span ng-if="$ctrl.item.stats_time">
+								{{ $ctrl.item.stats_time | formatMiddleDateTime }}
+							</span>
+						</div>
+						<div class="w-stretch divider-bottom">
+							<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_INIT_TIME_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.init_time ? ($ctrl.gatewayStatistics.init_time | formatMiddleDateTime) : '-' }}
+								</div>
+							</div>
+
+							<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_UP_TIME_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.up_time ? ($ctrl.gatewayStatistics.up_time | formatMiddleDateTime) : '-' }}
+								</div>
+							</div>
+
+							<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_UP_PACKETS_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.up_packets ? $ctrl.gatewayStatistics.up_packets : '-' }}
+								</div>
+							</div>
+
+							<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_UP_ERRORS_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.up_errors ? $ctrl.gatewayStatistics.up_errors : '-' }}
+								</div>
+							</div>
+
+							<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_DOWN_TIME_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.down_time ? ($ctrl.gatewayStatistics.down_time | formatMiddleDateTime) : '-' }}
+								</div>
+							</div>
+
+							<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_DOWN_PACKETS_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.down_packets ? $ctrl.gatewayStatistics.down_packets : '-' }}
+								</div>
+							</div>
+
+							<div class="layout-row layout-align-start-center bm8">
+								<div class="text-body1 flex rm16">
+									{{ 'GATEWAY_DOWN_ERRORS_LABEL' | translate }}
+								</div>
+								<div class="text-body2 flex">
+									{{ $ctrl.gatewayStatistics.down_errors ? $ctrl.gatewayStatistics.down_errors : '-' }}
+								</div>
+							</div>
+						</div>
+						<div class="text-title bp8 tp8 bm8 tm8" ng-if="$ctrl.item.stats && $ctrl.item.stats.length > 0">
+							{{ 'GATEWAY_STATISTICS_DEVICES_LABEL' | translate }}
+						</div>
+						<div class="w-stretch divider-bottom" ng-repeat="device in $ctrl.item.stats track by $index">
+							<div class="w-stretch" ng-if="device.device_udi">
+								<div class="pip-ref-item">
+									<div class="pip-face iqs-device-avatar rm8 layout-row layout-align-center-center color-primary-bg">
+										<md-icon md-svg-icon="iqs:tracker-1" class="lm0 iqs-icon" style="color: white; height: 32px;"></md-icon>
+									</div>
+									<div class="pip-content">
+										<p class="pip-title">{{ device.device_label || device.device_udi }}</p>
+										<p class="pip-subtitle">{{ $ctrl.typeCollection[device.device_type].title | translate }}</p>
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_INIT_TIME_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.init_time ? (device.init_time | formatMiddleDateTime) : '-' }}
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_UP_TIME_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.up_time ? (device.up_time | formatMiddleDateTime) : '-' }}
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_UP_PACKETS_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.up_packets ? device.up_packets : '-' }}
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_UP_ERRORS_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.up_errors ? device.up_errors : '-' }}
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_DOWN_TIME_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.down_time ? (device.down_time | formatMiddleDateTime) : '-' }}
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center divider-bottom bm8 bp8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_DOWN_PACKETS_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.down_packets ? device.down_packets : '-' }}
+									</div>
+								</div>
+
+								<div class="layout-row layout-align-start-center bm8">
+									<div class="text-body1 flex rm16">
+										{{ 'GATEWAY_DOWN_ERRORS_LABEL' | translate }}
+									</div>
+									<div class="text-body2 flex">
+										{{ device.down_errors ? device.down_errors : '-' }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="layout-column layout-align-center-center flex" ng-if="!$ctrl.item.stats || $ctrl.item.stats.length == 0">
+						<div class="layout-column layout-align-center-center flex iqs-empty">
+							<div class="pip-empty" ng-if="!$ctrl.isLoadedStatistics">
+								<img src="images/empty/empty.svg" class="pip-pic">
+								<div class="pip-text">
+									{{ ::'GATEWAYS_STATISTICS_EMPTY_TITLE' | translate }}
+								</div>
+							</div>
+
+							<div class="pip-empty" ng-if="$ctrl.isLoadedStatistics">
+								<img src="images/empty/progress.svg" class="pip-pic">
+								<div class="pip-text">
+									{{ ::'GATEWAYS_STATISTICS_LOADING_TITLE' | translate }}
+									<md-progress-linear md-mode="indeterminate" class="tm24"></md-progress-linear>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pip-footer " style="height: 86px">
+		<div class="pip-action-list w-stretch">
+			<md-button iqs-test-edit class="pip-action-list-item" xxxng-if="$ctrl.accessConfig.editGateway" ng-click="$ctrl.onEdit()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.editGateway">
+
+				<md-icon class="pip-pic" md-svg-icon="icons:pen"></md-icon>
+				<div class="pip-title">{{ ::'GATEWAYS_EDIT' | translate }}</div>
+			</md-button>
+			<md-button iqs-test-delete class="pip-action-list-item" xxxng-if="$ctrl.accessConfig.deleteGateway" ng-click="$ctrl.onDelete()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.deleteGateway">
+
+				<md-icon class="pip-pic" md-svg-icon="icons:trash"></md-icon>
+				<div class="pip-title">{{ ::'GATEWAYS_DELETE' | translate }}</div>
+			</md-button>
+			<md-button class="pip-action-list-item" xxng-if="$ctrl.accessConfig.pingGateway" ng-click="$ctrl.onPing()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.pingGateway">
+
+				<md-icon class="pip-pic" md-svg-icon="iqs:ping"></md-icon>
+				<div class="pip-title">{{ ::'GATEWAYS_PING' | translate }}</div>
+			</md-button>
+		</div>
+	</div>
+</pip-document>

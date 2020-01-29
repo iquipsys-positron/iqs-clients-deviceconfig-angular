@@ -1,0 +1,111 @@
+<pip-document class="pip-scroll ">
+	<md-progress-linear md-mode="indeterminate" style="position: absolute;" ng-show="$ctrl.transaction.busy()"></md-progress-linear>
+	<div class="pip-body">
+		<form name="form" novalidate>
+			<div ng-messages="$ctrl.form.$serverError" class="text-error color-error bm8">
+				<div ng-message="ERROR_11000">
+					<span ng-if="$ctrl.device.type == 'smartphone'">
+						{{ ::'DEVICE_PHONE_ERROR_SERVER_11000' | translate }}
+					</span>
+					<span ng-if="$ctrl.device.type != 'smartphone'">
+						{{ ::'DEVICE_UDI_ERROR_SERVER_11000' | translate }}
+					</span>
+				</div>
+				<div ng-message="ERROR_UNKNOWN">
+					{{ $ctrl.config.form.$serverError.ERROR_UNKNOWN | translate }}
+				</div>
+			</div>
+
+			<div class="layout-row layout-align-center-center">
+				<div class="pip-face-md iqs-device-avatar layout-row layout-align-center-center color-primary-bg p8">
+					<md-icon class="" md-svg-icon="iqs:tracker-1"></md-icon>
+				</div>
+			</div>
+			<md-input-container class="md-block flex bm24">
+				<label>{{::'TYPE'| translate}}</label>
+				<md-select iqs-test-type ng-model="$ctrl.device.type" pip-clear-errors required aria-label="TYPE" name="object_type"
+				           ng-disabled="$ctrl.transaction.busy()">
+					<md-option ng-repeat="type in $ctrl.typeCollection  track by $index" ng-value="type.id">
+						{{::type.title | translate}}
+					</md-option>
+				</md-select>
+
+				<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.object_type, true)" role="alert">
+					<div ng-message="required">{{ 'DIVICE_TYPE_REQUIRED_ERROR' | translate }}</div>
+				</div>
+			</md-input-container>
+
+			<md-input-container class="md-block flex bm0" ng-if="$ctrl.device.type == 'smartphone'">
+				<label>{{::'DEVICE_UDI_PHONE' | translate}}</label>
+				<input iqs-test-udi ng-model="$ctrl.device.udi" required aria-label="PHONE" ng-change="$ctrl.onChangeUdi()"
+				       pip-clear-errors iqs-phone-validator ng-change="$ctrl.error=''" name="phone" ng-disabled="$ctrl.transaction.busy()">
+
+				<div class="hint" ng-if="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.phone, true).hint">
+					{{::'DEVICE_UDI_HINT_PHONE' | translate}}
+				</div>
+
+				<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.phone, true)" role="alert">
+					<div ng-message="required">{{ 'DEVICE_UDI_PHONE_REQUIRED_ERROR' | translate }}</div>
+					<div ng-message="phoneValidate">{{ 'DEVICE_UDI_PHONE_VALIDATE_ERROR' | translate }}</div>
+					<div ng-message="verifyDeviceUdi">{{ 'DEVICE_UDI_NOT_UNIQUE' | translate }}</div>
+				</div>
+			</md-input-container>
+
+			<md-input-container class="md-block flex bm0" ng-if="$ctrl.device.type == 'iot device'">
+				<label>
+					{{::'DEVICE_UDI' | translate}}
+				</label>
+				<input iqs-test-udi ng-model="$ctrl.device.udi" required type="text" name="udi" ng-pattern="/([0-9a-fA-F]{2}){6}$|([0-9a-fA-F]{4}([.]|$)){3}/"
+				       pip-clear-errors ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()" ng-disabled="$ctrl.transaction.busy()" />
+
+
+				<div class="hint" ng-if="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.udi, true).hint">
+					{{::'DEVICE_UDI_HINT' | translate}}
+				</div>
+				<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.udi, true)" role="alert" multiple>
+					<div ng-message="required">{{ 'DEVICE_UDI_REQUIRED_ERROR' | translate }}</div>
+					<div ng-message="pattern">{{ 'DEVICE_MAC_NOTVALID_ERROR' | translate }}</div>
+					<div ng-message="verifyDeviceUdi">{{ 'DEVICE_UDI_NOT_UNIQUE' | translate }}</div>
+				</div>
+			</md-input-container>
+
+
+			<md-input-container class="md-block flex bm0" ng-if="$ctrl.device.type != 'smartphone' && $ctrl.device.type != 'iot device'">
+				<label>
+					{{::'DEVICE_UDI_UNKNOW' | translate}}
+				</label>
+				<input iqs-test-udi ng-model="$ctrl.device.udi" required type="text" name="udi" ng-pattern="/^([0-9a-fA-F])*$/"
+				       pip-clear-errors ng-model-options="{ delay: 500 }" ng-change="$ctrl.onChangeUdi()" ng-disabled="$ctrl.transaction.busy()" />
+
+				<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.udi, true)" role="alert" multiple>
+					<div ng-message="required">{{ 'DEVICE_UDI_REQUIRED_ERROR' | translate }}</div>
+					<div ng-message="pattern">{{ 'DEVICE_HEX_NOTVALID_ERROR' | translate }}</div>
+					<div ng-message="verifyDeviceUdi">{{ 'DEVICE_UDI_NOT_UNIQUE' | translate }}</div>
+				</div>
+			</md-input-container>
+
+			<md-input-container class="md-block flex bm0">
+				<label>{{::'LABEL' | translate}}</label>
+				<input iqs-test-label ng-model="$ctrl.device.label" name="device_label" iqs-unique-validator iqs-unique-collection="$ctrl.nameCollection"
+				       pip-clear-errors ng-disabled="$ctrl.transaction.busy()" />
+
+				<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.device_label, true)" role="alert">
+					<div ng-message="uniqueValidate">{{ 'DIVICE_LABEL_UNIQUE_ERROR' | translate }}</div>
+				</div>
+			</md-input-container>
+		</form>
+	</div>
+
+	<div class="pip-footer " style="height: 86px">
+		<div class="pip-action-list w-stretch">
+			<md-button iqs-test-save class="pip-action-list-item" ng-click="$ctrl.saveClick()" ng-disabled="$ctrl.isQuery || $ctrl.transaction.busy()">
+				<md-icon class="pip-pic" md-svg-icon="icons:check"></md-icon>
+				<div class="pip-title">{{::'SAVE' | translate }}</div>
+			</md-button>
+			<md-button iqs-test-cancel class="pip-action-list-item" ng-click="$ctrl.cancelClick()" ng-disabled="$ctrl.transaction.busy()">
+				<md-icon class="pip-pic" md-svg-icon="icons:cross"></md-icon>
+				<div class="pip-title">{{::'CANCEL' | translate}}</div>
+			</md-button>
+		</div>
+	</div>
+</pip-document>

@@ -1,0 +1,45 @@
+<div ng-if="$ctrl.object" class="divider-top tm16 lp16 rp16">
+	<div class="bp12 tm24 color-secondary-text">
+		{{::'ADMIN_WITH_OBJECT' | translate}}
+	</div>
+	<div class="pip-ref-list">
+		<div class="pip-ref-list-item layout-row bp16">
+			<pip-avatar class="rm16 pip-face pip-pic pointer" pip-rebind="true" pip-id="$ctrl.object.id" ng-click="$ctrl.gotoConfig($ctrl.object.id)"
+			            pip-name="$ctrl.object.name"></pip-avatar>
+			<div class="pip-content">
+				<p class="pip-title">{{ $ctrl.object.name }}</p>
+				<p class="pip-subtitle text-overflow">
+					{{ $ctrl.object.description || $ctrl.typeCollection[$ctrl.object.type].title | translate }}
+				</p>
+				<div class="layout-row tm8">
+					<md-button class="m0 md-raised " ng-click="$ctrl.change($ctrl.object)" xxng-if="$ctrl.accessConfig.editDevice"
+					           ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.editDevice || $ctrl.panelTransaction.busy()">
+
+						{{::'DEVICES_ADD_ASSINE_OBJECT' | translate}}
+					</md-button>
+					<md-button class="rm0 tm0 bm0 md-raised" ng-click="$ctrl.delete()" xxxng-if="$ctrl.accessConfig.editDevice"
+					           ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.editDevice || $ctrl.panelTransaction.busy()">
+
+						{{::'DEVICES_DELETE_ASSINE_OBJECT' | translate}}
+					</md-button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="divider-top tm16 pip-ref-list lp16 rp16" ng-if="!$ctrl.object">
+
+	<div class="bp16 tm24 color-secondary-text">
+		{{::'ADMIN_WITH_OBJECT' | translate}}
+	</div>
+	<div class="layout-column" style="margin: 0 auto; width: 300px">
+		<div class="text-body2 bm8 text-center">{{:: 'OBJECT_EMPTY_DEVICE' | translate}}</div>
+		<md-button class="md-raised lm0 md-accent" ng-click="$ctrl.change()" xxxng-if="$ctrl.accessConfig.editDevice"
+		           ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.editDevice || $ctrl.panelTransaction.busy()">
+
+			{{::'DEVICES_ADD_ASSINE_OBJECT_EMPTY' | translate}}
+		</md-button>
+	</div>
+</div>

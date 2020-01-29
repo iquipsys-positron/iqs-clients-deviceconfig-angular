@@ -1,0 +1,29 @@
+.iqs-beacon-panel {
+    .pip-ref-title {
+        height: 48px;
+        min-height: 48px;
+    }
+    .pip-ref-title {
+        md-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 16px;
+        }
+    }
+    .iqs-rules-list {
+        .iqs-rules-list-item {
+            .md-ripple-container {
+                display: none;
+            }
+            padding: 0px;
+            text-overflow: hidden;
+            .pip-content {
+                max-width: 100%;
+                padding: 16px 0px;
+                p {
+                    margin: 0px;
+                }
+            }
+        }
+    }
+}

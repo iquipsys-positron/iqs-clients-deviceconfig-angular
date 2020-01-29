@@ -1,0 +1,26 @@
+<div class="layout-column layout-align-center-center flex bb-empty">
+	<div class="pip-empty" ng-if="$ctrl.state() == 'empty' && !$ctrl.isPreLoading">
+		<img src="images/empty/empty.svg" class="pip-pic">
+		<div class="pip-text">
+			{{:: 'ADD_DEVICE_EMPTY' | translate}}
+		</div>
+		<div class="pip-text tm16 bm16">
+			{{:: 'ADD_DEVICE_EMPTY1' | translate}}
+		</div>
+		<div class="pip-actions layout-row layout-align-end-center tm16">
+			<md-button iqs-test-add class="color-accent-bg tm12 flex" aria-label="DOWNLOAD" xxxng-if="$ctrl.accessConfig.addDevice"
+			           ng-click="$ctrl.addClick()" ng-disabled="$ctrl.transaction.busy() || !$ctrl.accessConfig.addDevice">
+
+				{{::'ADD_DEVICE'| translate}}
+			</md-button>
+		</div>
+	</div>
+
+	<div class="pip-empty" ng-if="$ctrl.state() == 'progress' || $ctrl.isPreLoading">
+		<img src="images/empty/progress.svg" class="pip-pic">
+		<div class="pip-text">
+			{{:: 'LOADING_DEVICES' | translate }}
+			<md-progress-linear md-mode="indeterminate" class="tm24"></md-progress-linear>
+		</div>
+	</div>
+</div>

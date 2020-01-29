@@ -1,0 +1,18 @@
+@import './beacons/Beacons';
+@import './devices/Devices';
+@import './gateways/Gateways';
+iqs-settings-usage-statistics-panel {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.iqs-config {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    .pip-main-menu {
+        height: 100%;
+    }
+}

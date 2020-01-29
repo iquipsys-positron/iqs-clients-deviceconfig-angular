@@ -1,0 +1,54 @@
+<md-dialog class="pip-dialog iqs-incidents-resolution-dialog layout-column bp0 pip-scroll" style="height: 80%" md-theme="{{$ctrl.theme}}">
+
+	<md-progress-linear md-mode="indeterminate" class="dialog-progress-linear" ng-show="$ctrl.transaction.busy()">
+	</md-progress-linear>
+	<div class="pip-header p16 divider-bottom">
+		<div class="w-stretch">
+			<h3 class="m0 bm16 w-stretch">{{ ::$ctrl.dialogTitle | translate }}</h3>
+			<iqs-global-search-panel iqs-search-query="$ctrl.status" iqs-search-callback="$ctrl.onSearchResult(query)"
+			                         iqs-cancel-callback="$ctrl.onCanselSearch()" iqs-default-values="$ctrl.defaultCollection"
+			                         iqs-search-collection="$ctrl.searchedCollection">
+			</iqs-global-search-panel>
+		</div>
+	</div>
+
+	<div class="pip-body p0" ng-if="$ctrl.objects.length > 0">
+		<md-list class="pip-ref-list tp0">
+			<md-list-item class="pip-ref-list-item divider-bottom" md-ink-ripple ng-class="{'iqs-object-select': $ctrl.selected.id == section.id}"
+			              ng-repeat="section in $ctrl.objects  track by $index" ng-click="$ctrl.selectItem($index)">
+				<div class="pip-pic tm0">
+					<pip-avatar class="pip-face" pip-rebind="true" pip-id="section.item.id" pip-name="section.item.name"></pip-avatar>
+				</div>
+				<div class="pip-content">
+					<p class="pip-title text-overflow flex">
+						{{ section.item.name }}
+					</p>
+					<p class="pip-subtitle text-overflow flex">
+						{{section.item | formatObjectSubtitle}}
+					</p>
+				</div>
+				<div>
+				</div>
+			</md-list-item>
+		</md-list>
+	</div>
+
+	<div class="layout-column flex pip-body p0" ng-if="$ctrl.objects.length == 0">
+
+		<div class="layout-column layout-align-center-center flex bb-empty">
+			<div class="pip-empty">
+				<img src="images/empty/empty.svg" class="pip-pic">
+				<div class="pip-text">
+					{{:: 'DEVICES_OBJECTS_DIALOG_EMPTY'| translate}}
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="pip-footer ">
+		<md-button ng-click="$ctrl.cancel()">{{::'CANCEL' | translate}}</md-button>
+		<md-button class="md-accent" ng-click="$ctrl.change()">{{:: 'DEVICES_OBJECTS_DIALOG_OK' | translate}}</md-button>
+	</div>
+</md-dialog>
