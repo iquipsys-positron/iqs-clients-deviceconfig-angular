@@ -14,6 +14,6 @@
     }
 
     angular
-        .module('iqsConfig')
+        .module('iqsConfig.Translations', [])
         .config(declareConfigTranslateResources);
 }

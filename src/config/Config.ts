@@ -42,6 +42,7 @@ export const ConfigStateName: string = 'app';
             'iqsConfigBeacons',
             'iqsConfigDevices',
             'iqsConfigGateways',
+            'iqsConfig.Translations'
         ])
         .config(configureConfigRoute)
         .config(configureConfigAccess);
