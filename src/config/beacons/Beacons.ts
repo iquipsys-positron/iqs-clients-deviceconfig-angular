@@ -402,6 +402,7 @@ function configureConfigBeaconsAccess(
             'iqsBeacons.SaveService',
 
 
+            'iqsAccessConfig',
             'iqsBeaconPanel',
             'iqsBeaconEmptyPanel',
             'iqsBeaconEditPanel',
